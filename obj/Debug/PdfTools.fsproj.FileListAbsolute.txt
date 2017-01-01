@@ -1,0 +1,14 @@
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfTools.exe.config
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfTools.XML
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfTools.exe
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfTools.pdb
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\FSharp.Core.dll
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfSharp.Charting.dll
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfSharp.dll
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\FSharp.Core.xml
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfSharp.xml
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\PdfSharp.Charting.xml
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\de\PdfSharp.resources.dll
+C:\Users\Jiung\Documents\F#\PdfTools\bin\Debug\de\PdfSharp.Charting.resources.dll
+C:\Users\Jiung\Documents\F#\PdfTools\obj\Debug\PdfTools.exe
+C:\Users\Jiung\Documents\F#\PdfTools\obj\Debug\PdfTools.pdb
