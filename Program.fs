@@ -4,6 +4,7 @@ open MergePdf
 open MetroFramework
 open MetroFramework.Controls
 open MetroFramework.Forms
+open System
 open System.Threading
 open System.Drawing
 open System.Windows.Forms
@@ -14,6 +15,7 @@ open System.Runtime.InteropServices
 extern bool SetProcessDPIAware();
 
 [<EntryPoint>]
+[<STAThreadAttribute>]
 let main argv = 
     printfn "%A" argv
 
@@ -28,26 +30,19 @@ let main argv =
     mainForm.AutoSize <- true
     mainForm.MinimumSize <- new Size(640, 480)
 
-    mergeForm.FormClosed.Add(fun _ ->
-        //mainForm.ShowDialog() |> ignore
-        mainForm.Show()
-    )
-
     let mergeTile = new MetroTile(Text = "Merge PDF", Size = new Size(120, 120), TextAlign = ContentAlignment.MiddleCenter, Location = new Point(120, 120))
     mergeTile.Click.Add(fun _ ->
-        //mainForm.Dispose()
-        //mainForm.Close()
         mainForm.Hide()
-        mainForm.Show()
+        let mergeForm = mergeFormGenerator()
+        mergeForm.FormClosed.Add(fun _ ->
+            
+            mainForm.Show()
+        )
+        mergeForm.ShowDialog() |> ignore
     )
+
     mainForm.Controls.AddRange([| mergeTile |])
-    
-    let mainThread = new System.Threading.Thread(new System.Threading.ThreadStart(fun _ ->
-        mainForm.ShowDialog() |> ignore
-    ))
 
-    mainThread.SetApartmentState(System.Threading.ApartmentState.STA)
-
-    mainThread.Start()
+    mainForm.ShowDialog() |> ignore
 
     0 // return an integer exit code
