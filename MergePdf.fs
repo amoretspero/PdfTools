@@ -14,10 +14,14 @@
     open PdfSharp
     open PdfSharp.Pdf
     open PdfSharp.Pdf.IO
+    open MetroFramework
+    open MetroFramework.Controls
+    open MetroFramework.Drawing
+    open MetroFramework.Forms
 
     // Form definition region.
     
-    let mergeForm = new Form()
+    let mergeForm = new MetroForm()
     mergeForm.AutoSizeMode <- AutoSizeMode.GrowOnly
     mergeForm.AutoSize <- true
 
@@ -45,31 +49,31 @@
         )
     
     // Label definition region.
-    let label_InputPdf1 = new Label(Text = "Input 1", Width = 100, Height = 30, Location = new Point(20, 50), TextAlign = ContentAlignment.MiddleCenter)
-    let label_InputPdf2 = new Label(Text = "Input 2", Width = 100, Height = 30, Location = new Point(20, 200), TextAlign = ContentAlignment.MiddleCenter)
+    let label_InputPdf1 = new MetroLabel(Text = "Input 1", Width = 100, Height = 30, Location = new Point(20, 50), TextAlign = ContentAlignment.MiddleCenter)
+    let label_InputPdf2 = new MetroLabel(Text = "Input 2", Width = 100, Height = 30, Location = new Point(20, 200), TextAlign = ContentAlignment.MiddleCenter)
 
-    let label_Status = new Label(Text = "Ready", Width = 100, Height = 30, Location = new Point(20, 380), TextAlign = ContentAlignment.MiddleCenter)
+    let label_Status = new MetroLabel(Text = "Ready", Width = 100, Height = 30, Location = new Point(20, 380), TextAlign = ContentAlignment.MiddleCenter)
 
     mergeForm.Controls.AddRange([| label_InputPdf1; label_InputPdf2; label_Status |])
 
 
     // Button definition region.
-    let button_InputPdf1 = new Button(Text = "Select Pdf 1", Width = 100, Height = 30, Location = new Point(170, 50))
-    let button_InputPdf2 = new Button(Text = "Select Pdf 2", Width = 100, Height = 30, Location = new Point(170, 200))
+    let button_InputPdf1 = new MetroButton(Text = "Select Pdf 1", Width = 100, Height = 30, Location = new Point(170, 50))
+    let button_InputPdf2 = new MetroButton(Text = "Select Pdf 2", Width = 100, Height = 30, Location = new Point(170, 200))
+    
+    let button_ResetPdf1 = new MetroButton(Text = "Reset Pdf 1", Width = 100, Height = 30, Location = new Point(320, 50))
+    let button_ResetPdf2 = new MetroButton(Text = "Reset Pdf 2", Width = 100, Height = 30, Location = new Point(320, 200))
 
-    let button_ResetPdf1 = new Button(Text = "Reset Pdf 1", Width = 100, Height = 30, Location = new Point(320, 50))
-    let button_ResetPdf2 = new Button(Text = "Reset Pdf 2", Width = 100, Height = 30, Location = new Point(320, 200))
+    let button_MergePdf = new MetroButton(Text = "Merge!", Width = 100, Height = 30, Location = new Point(20, 320))
 
-    let button_MergePdf = new Button(Text = "Merge!", Width = 100, Height = 30, Location = new Point(20, 320))
-
-    let button_EndProgram = new Button(Text = "Close", Width = 70, Height = 30, Location = new Point(760, 420), Margin = new Padding(20))
+    let button_EndProgram = new MetroButton(Text = "Close", Width = 70, Height = 30, Location = new Point(760, 420), Margin = new Padding(20))
 
     mergeForm.Controls.AddRange([| button_InputPdf1; button_InputPdf2; button_ResetPdf1; button_ResetPdf2; button_EndProgram; button_MergePdf |])
 
 
     // Textbox definition region.
-    let textbox_InputPdf1 = new TextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 100), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
-    let textbox_InputPdf2 = new TextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 250), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
+    let textbox_InputPdf1 = new MetroTextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 100), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
+    let textbox_InputPdf2 = new MetroTextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 250), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
 
     mergeForm.Controls.AddRange([| textbox_InputPdf1; textbox_InputPdf2 |])
 
@@ -113,7 +117,8 @@
     )
 
     button_EndProgram.Click.Add(fun _ ->
-        mergeForm.Close()    
+        //mergeForm.Dispose()
+        mergeForm.Hide()    
     )
 
     button_MergePdf.Click.Add(fun _ ->
