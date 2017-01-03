@@ -18,6 +18,9 @@ so if one need to merge or extract some pages or do other things, he/she have to
 - **Page Deletion** : Currently not supported.  
 - **Selective Merge**(Multiple PDF files, select pages and merge them to one PDF) : Currently not supported.  
   
+## Usage  
+Just download 'PdfTools.exe' file and run!
+  
 ## Maintainer  
   
 This project is maintained by **amoretspero**(Jiung Hahm).  
