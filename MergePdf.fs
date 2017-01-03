@@ -44,6 +44,14 @@
                 RestoreDirectory = true
             )
 
+        let openFileDialogAddPdf = 
+            new OpenFileDialog(
+                InitialDirectory = "C:\\",
+                Filter = "pdf files (*.pdf)|*.pdf|All files (*.*)|*.*",
+                FilterIndex = 1,
+                RestoreDirectory = true
+            )
+
         let saveFileDialog = 
             new SaveFileDialog(
                 Filter = "pdf file|*.pdf",
@@ -66,11 +74,13 @@
         let button_ResetPdf1 = new MetroButton(Text = "Reset Pdf 1", Width = 100, Height = 30, Location = new Point(320, 50))
         let button_ResetPdf2 = new MetroButton(Text = "Reset Pdf 2", Width = 100, Height = 30, Location = new Point(320, 200))
 
+        let button_AddPdf = new MetroButton(Text = "Add Pdf file", Width = 100, Height = 30, Location = new Point(100, 480))
+
         let button_MergePdf = new MetroButton(Text = "Merge!", Width = 100, Height = 30, Location = new Point(20, 320))
 
         let button_EndProgram = new MetroButton(Text = "Close", Width = 70, Height = 30, Location = new Point(760, 420), Margin = new Padding(20))
 
-        mergeForm.Controls.AddRange([| button_InputPdf1; button_InputPdf2; button_ResetPdf1; button_ResetPdf2; button_EndProgram; button_MergePdf |])
+        mergeForm.Controls.AddRange([| button_InputPdf1; button_InputPdf2; button_ResetPdf1; button_ResetPdf2; button_AddPdf; button_EndProgram; button_MergePdf |])
 
 
         // Textbox definition region.
@@ -78,6 +88,46 @@
         let textbox_InputPdf2 = new MetroTextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 250), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
 
         mergeForm.Controls.AddRange([| textbox_InputPdf1; textbox_InputPdf2 |])
+
+        // Listview definition region.
+        let listview_Input = new MetroListView(Location = new Point(100, 520), Size = new Size(640, 120))
+        listview_Input.View <- View.Details
+        listview_Input.GridLines <- true
+        listview_Input.FullRowSelect <- true
+        listview_Input.Columns.Add("FileName", 630, HorizontalAlignment.Center) |> ignore
+        listview_Input.AllowDrop <- true
+        listview_Input.ItemDrag.Add(fun _ ->
+            listview_Input.DoDragDrop(listview_Input.SelectedItems, DragDropEffects.Move) |> ignore
+        )
+        listview_Input.DragDrop.Add(fun e ->
+            //e.Effect <- DragDropEffects.Copy
+            if (listview_Input.SelectedItems.Count > 0) then
+                let cp = listview_Input.PointToClient(new Point(e.X, e.Y))
+                let dragToItem = listview_Input.GetItemAt(cp.X, cp.Y)
+                if (dragToItem <> null) then
+                    let dragIndex = dragToItem.Index
+                    let sel = Array.init listview_Input.SelectedItems.Count (fun x -> new ListViewItem())
+                    for i=0 to listview_Input.SelectedItems.Count-1 do
+                        sel.[i] <- listview_Input.SelectedItems.[i]
+                    for i=0 to sel.GetLength(0) - 1 do
+                        let dragItem = sel.[i]
+                        let mutable itemIndex = dragIndex
+                        if (itemIndex = dragItem.Index) then ()
+                        if (dragItem.Index < itemIndex) then itemIndex <- itemIndex + 1
+                        else itemIndex <- dragIndex + i
+                        let insertItem = dragItem.Clone() :?> ListViewItem
+                        listview_Input.Items.Insert(itemIndex, insertItem) |> ignore
+                        listview_Input.Items.Remove(dragItem)
+        )
+        listview_Input.DragEnter.Add(fun e ->
+            //listview_Input.Items.Add(e.Data.ToString()) |> ignore
+            let len = e.Data.GetFormats().Length - 1
+            for i=0 to len do
+                if (e.Data.GetFormats().[i].Equals("System.Windows.Forms.ListView+SelectedListViewItemCollection")) then
+                    e.Effect <- DragDropEffects.Move
+        )
+
+        mergeForm.Controls.AddRange([| listview_Input |])
 
         // Button event listener region.
         button_InputPdf1.Click.Add(fun _ ->
@@ -116,6 +166,21 @@
 
         button_ResetPdf2.Click.Add(fun _ ->
             textbox_InputPdf2.Text <- ""
+        )
+
+        button_AddPdf.Click.Add(fun _ ->
+            let openFileDialogAddPdfResult = openFileDialogAddPdf.ShowDialog()
+            match openFileDialogAddPdfResult with
+            | DialogResult.OK ->
+                try
+                    let fileName = openFileDialogAddPdf.FileName
+                    listview_Input.Items.Add(fileName) |> ignore
+                with
+                    | :? System.Exception as e -> printfn "Error: %s" e.Message
+            | DialogResult.Cancel ->
+                printfn "Cancelled selection."
+            | _ ->
+                printfn "%A" openFileDialogAddPdf
         )
 
         button_EndProgram.Click.Add(fun _ ->
