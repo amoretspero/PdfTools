@@ -10,7 +10,8 @@ so if one need to merge or extract some pages or do other things, he/she have to
   
 ## Main Features  
   
-- **Merge** : Currently supports 2-file merge. Will support multi-file merge soon.  
+- **Merge - 2 Files** : Supported.  
+- **Merge - Multiple Files** : Supported. List design will be improved soon.  
 - **Extract** : Currently not supported. Will support extract page as pdf/image soon.  
 - **PdfToImage** : Currently not supported.  
 - **ImageToPdf** : Currently not supported.  
