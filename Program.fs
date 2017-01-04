@@ -1,6 +1,7 @@
 ﻿// Learn more about F# at http://fsharp.org
 // See the 'F# Tutorial' project for more help.
 open MergePdf
+open MergePdfMultiple
 open MetroFramework
 open MetroFramework.Controls
 open MetroFramework.Forms
@@ -30,18 +31,27 @@ let main argv =
     mainForm.AutoSize <- true
     mainForm.MinimumSize <- new Size(640, 480)
 
-    let mergeTile = new MetroTile(Text = "Merge PDF", Size = new Size(120, 120), TextAlign = ContentAlignment.MiddleCenter, Location = new Point(120, 120))
+    let mergeTile = new MetroTile(Text = "Merge PDF\n - 2 Files", Size = new Size(120, 120), TextAlign = ContentAlignment.MiddleCenter, Location = new Point(120, 120))
     mergeTile.Click.Add(fun _ ->
         mainForm.Hide()
         let mergeForm = mergeFormGenerator()
         mergeForm.FormClosed.Add(fun _ ->
-            
             mainForm.Show()
         )
         mergeForm.ShowDialog() |> ignore
     )
 
-    mainForm.Controls.AddRange([| mergeTile |])
+    let mergeMultipleTile = new MetroTile(Text = "Merge PDF\n - Multiple Files", Size = new Size(120, 120), TextAlign = ContentAlignment.MiddleCenter, Location = new Point(260, 120))
+    mergeMultipleTile.Click.Add(fun _ ->
+        mainForm.Hide()
+        let mergeMultipleForm = mergeMultipleFormGenerator()
+        mergeMultipleForm.FormClosed.Add(fun _ ->
+            mainForm.Show()
+        )
+        mergeMultipleForm.ShowDialog() |> ignore
+    )
+
+    mainForm.Controls.AddRange([| mergeTile; mergeMultipleTile |])
 
     mainForm.ShowDialog() |> ignore
 

@@ -1,4 +1,4 @@
-﻿module MergePdf
+﻿module MergePdfMultiple
 
     open System
     open System.Collections
@@ -19,37 +19,22 @@
     open MetroFramework.Drawing
     open MetroFramework.Forms
 
-    let mergeFormGenerator () =
+    let mergeMultipleFormGenerator () =
 
         // Form definition region.
     
-        let mergeForm = new MetroForm()
-        mergeForm.AutoSizeMode <- AutoSizeMode.GrowOnly
-        mergeForm.AutoSize <- true
+        let mergeMultipleForm = new MetroForm()
+        mergeMultipleForm.AutoSizeMode <- AutoSizeMode.GrowOnly
+        mergeMultipleForm.AutoSize <- true
 
         // File dialog definition region.
-        let openFileDialogPdf1 = 
-            new OpenFileDialog(
-                InitialDirectory = "C:\\", 
-                Filter = "pdf files (*.pdf)|*.pdf|All files (*.*)|*.*",
-                FilterIndex = 1,
-                RestoreDirectory = true
-            )
-
-        let openFileDialogPdf2 = 
-            new OpenFileDialog(
-                InitialDirectory = "C:\\",
-                Filter = "pdf files (*.pdf)|*.pdf|All files (*.*)|*.*",
-                FilterIndex = 1,
-                RestoreDirectory = true
-            )
-
         let openFileDialogAddPdf = 
             new OpenFileDialog(
                 InitialDirectory = "C:\\",
                 Filter = "pdf files (*.pdf)|*.pdf|All files (*.*)|*.*",
                 FilterIndex = 1,
-                RestoreDirectory = true
+                RestoreDirectory = true,
+                Multiselect = true
             )
 
         let saveFileDialog = 
@@ -61,10 +46,11 @@
         // Label definition region.
         let label_InputPdf1 = new MetroLabel(Text = "Input 1", Width = 100, Height = 30, Location = new Point(20, 50), TextAlign = ContentAlignment.MiddleCenter)
         let label_InputPdf2 = new MetroLabel(Text = "Input 2", Width = 100, Height = 30, Location = new Point(20, 200), TextAlign = ContentAlignment.MiddleCenter)
+        let label_InputPdfs = new MetroLabel(Text = "Input Pdf Files", Width = 100, Height = 30, Location = new Point(20, 50), TextAlign = ContentAlignment.MiddleCenter)
 
-        let label_Status = new MetroLabel(Text = "Ready", Width = 100, Height = 30, Location = new Point(20, 380), TextAlign = ContentAlignment.MiddleCenter)
+        let label_Status = new MetroLabel(Text = "Ready", Width = 100, Height = 30, Location = new Point(20, 200), TextAlign = ContentAlignment.MiddleCenter)
 
-        mergeForm.Controls.AddRange([| label_InputPdf1; label_InputPdf2; label_Status |])
+        mergeMultipleForm.Controls.AddRange([| label_InputPdfs; label_Status |])
 
 
         // Button definition region.
@@ -74,27 +60,31 @@
         let button_ResetPdf1 = new MetroButton(Text = "Reset Pdf 1", Width = 100, Height = 30, Location = new Point(320, 50))
         let button_ResetPdf2 = new MetroButton(Text = "Reset Pdf 2", Width = 100, Height = 30, Location = new Point(320, 200))
 
-        //let button_AddPdf = new MetroButton(Text = "Add Pdf file", Width = 100, Height = 30, Location = new Point(100, 480))
+        let button_ClearSelected = new MetroButton(Text = "Clear selected item", Width = 120, Height = 30, Location = new Point(300, 50))
+        let button_ClearAll = new MetroButton(Text = "Clear All items", Width = 100, Height = 30, Location = new Point(450, 50))
 
-        let button_MergePdf = new MetroButton(Text = "Merge!", Width = 100, Height = 30, Location = new Point(20, 320))
+        let button_AddPdf = new MetroButton(Text = "Add Pdf file", Width = 100, Height = 30, Location = new Point(150, 50))
+
+        let button_MergePdf = new MetroButton(Text = "Merge!", Width = 100, Height = 30, Location = new Point(650, 50))
 
         let button_EndProgram = new MetroButton(Text = "Close", Width = 70, Height = 30, Location = new Point(760, 420), Margin = new Padding(20))
 
-        mergeForm.Controls.AddRange([| button_InputPdf1; button_InputPdf2; button_ResetPdf1; button_ResetPdf2; (*button_AddPdf;*) button_EndProgram; button_MergePdf |])
+        mergeMultipleForm.Controls.AddRange([| (*button_InputPdf1; button_InputPdf2; button_ResetPdf1; button_ResetPdf2;*) button_AddPdf; button_ClearSelected; button_ClearAll; button_EndProgram; button_MergePdf |])
 
 
         // Textbox definition region.
         let textbox_InputPdf1 = new MetroTextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 100), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
         let textbox_InputPdf2 = new MetroTextBox(Text = "", MinimumSize = new Size(720, 30), Location = new Point(170, 250), ReadOnly = true, Margin = new Padding(0, 0, 20, 0), AutoSize = true)
 
-        mergeForm.Controls.AddRange([| textbox_InputPdf1; textbox_InputPdf2 |])
+        //mergeForm.Controls.AddRange([| textbox_InputPdf1; textbox_InputPdf2 |])
 
         // Listview definition region.
-        (*let listview_Input = new ListView(Location = new Point(100, 520), Size = new Size(640, 120))
+        let listview_Input = new ListView(Location = new Point(150, 100), Size = new Size(640, 120))
         listview_Input.View <- View.Details
         listview_Input.GridLines <- true
         listview_Input.FullRowSelect <- true
-        listview_Input.Columns.Add("FileName", 600, HorizontalAlignment.Center) |> ignore
+        listview_Input.Columns.Add("FileName", 300, HorizontalAlignment.Center) |> ignore
+        listview_Input.Columns.Add("Location", 300, HorizontalAlignment.Center) |> ignore
         listview_Input.AllowDrop <- true
         listview_Input.ItemDrag.Add(fun _ ->
             listview_Input.DoDragDrop(listview_Input.SelectedItems, DragDropEffects.Move) |> ignore
@@ -127,10 +117,10 @@
                     e.Effect <- DragDropEffects.Move
         )
 
-        mergeForm.Controls.AddRange([| listview_Input |])*)
+        mergeMultipleForm.Controls.AddRange([| listview_Input |])
 
         // Button event listener region.
-        button_InputPdf1.Click.Add(fun _ ->
+        (*button_InputPdf1.Click.Add(fun _ ->
             let openFileDialogPdf1Result = openFileDialogPdf1.ShowDialog()
             match openFileDialogPdf1Result with
             | DialogResult.OK ->
@@ -166,15 +156,23 @@
 
         button_ResetPdf2.Click.Add(fun _ ->
             textbox_InputPdf2.Text <- ""
-        )
+        )*)
 
-        (*button_AddPdf.Click.Add(fun _ ->
+        button_AddPdf.Click.Add(fun _ ->
             let openFileDialogAddPdfResult = openFileDialogAddPdf.ShowDialog()
             match openFileDialogAddPdfResult with
             | DialogResult.OK ->
                 try
-                    let fileName = Path.GetFileName(openFileDialogAddPdf.FileName)
-                    listview_Input.Items.Add(fileName) |> ignore
+                    let files = openFileDialogAddPdf.FileNames
+                    listview_Input.BeginUpdate()
+                    for f in files do
+                        let fileName = Path.GetFileName(f)
+                        let location = Path.GetDirectoryName(f)
+                        listview_Input.Items.Add(new ListViewItem([| fileName; location |])) |> ignore
+                    listview_Input.EndUpdate()
+                    //let fileName = Path.GetFileName(openFileDialogAddPdf.FileName)
+                    //let location = Path.GetDirectoryName(openFileDialogAddPdf.FileName)
+                    //listview_Input.Items.Add(new ListViewItem([| fileName; location |])) |> ignore
                     //listview_Input.UpdateScrollbar()
                 with
                     | :? System.Exception as e -> printfn "Error: %s" e.Message
@@ -182,21 +180,87 @@
                 printfn "Cancelled selection."
             | _ ->
                 printfn "%A" openFileDialogAddPdf
-        )*)
+        )
+
+        button_ClearSelected.Click.Add(fun _ ->
+            let selectedItems = listview_Input.SelectedItems
+            listview_Input.BeginUpdate()
+            for si in selectedItems do
+                listview_Input.Items.Remove(si)
+            listview_Input.EndUpdate()
+        )
+
+        button_ClearAll.Click.Add(fun _ ->
+            let items = listview_Input.Items
+            listview_Input.BeginUpdate()
+            for i in items do
+                listview_Input.Items.Remove(i)
+            listview_Input.EndUpdate()
+        )
 
         button_EndProgram.Click.Add(fun _ ->
-            mergeForm.Close()
+            mergeMultipleForm.Close()
         )
 
         button_MergePdf.Click.Add(fun _ ->
-            if (textbox_InputPdf1.Text = "") then
-                MetroMessageBox.Show(mergeForm, "Please select input source 1.", "Error - Unspecified source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+            if (listview_Input.Items.Count <= 1) then
+                MetroMessageBox.Show(mergeMultipleForm, "Please add more than 1 file(s) to merge.", "Error - Not enough files", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+            else
+                let invalidFiles = ref ([| |] : string [])
+                for li in listview_Input.Items do
+                    let fileName = li.SubItems.[0].Text
+                    let path = li.SubItems.[1].Text
+                    let fullPath = Path.Combine(path, fileName)
+                    if (PdfReader.TestPdfFile(fullPath) = 0) then
+                        invalidFiles.Value <- Array.append invalidFiles.Value [| fileName |]
+                if (invalidFiles.Value.Count() > 0) then
+                    let errorMessage = 
+                        let sb = StringBuilder()
+                        sb.Append("There are invalid pdf files: \n") |> ignore
+                        for invalidFile in invalidFiles.Value do
+                            sb.Append(invalidFile + "\n") |> ignore
+                        sb.ToString()
+                    MetroMessageBox.Show(mergeMultipleForm, errorMessage, "Error - Invalid PDF file(s)", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+                else
+                    let saveFileDialogResult = saveFileDialog.ShowDialog()
+                    match saveFileDialogResult with
+                    | DialogResult.OK ->
+                        label_Status.Text <- "Reading Sources..."
+                        label_Status.Refresh() 
+                        let pdfSources = ref ([| |] : PdfDocument [])
+                        for li in listview_Input.Items do
+                            let fileName = li.SubItems.[0].Text
+                            let path = li.SubItems.[1].Text
+                            let fullPath = Path.Combine(path, fileName)
+                            let pdfDoc = PdfReader.Open(fullPath, PdfDocumentOpenMode.Import)
+                            pdfSources.Value <- Array.append pdfSources.Value [| pdfDoc |]
+                        label_Status.Text <- "Successfully Read Sources."
+                        label_Status.Refresh()
+                        label_Status.Text <- "Merging Files..."
+                        label_Status.Refresh()
+                        let pdfMerged = new PdfDocument()
+                        for pd in pdfSources.Value do
+                            for i=0 to pd.PageCount-1 do
+                                pdfMerged.AddPage(pd.Pages.[i]) |> ignore
+                        pdfMerged.Save(saveFileDialog.FileName)
+                        label_Status.Text <- "Success!"
+                        label_Status.Refresh()
+                        MetroMessageBox.Show(mergeMultipleForm, "Successfully merged files.", "Success - Merge", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
+                        label_Status.Text <- "Ready"
+                        label_Status.Refresh()
+                    | DialogResult.Cancel ->
+                        printfn "Cancelled merge."
+                    | _ ->
+                        printfn "%A" saveFileDialogResult
+            
+            (*if (textbox_InputPdf1.Text = "") then
+                MetroMessageBox.Show(mergeMultipleForm, "Please select input source 1.", "Error - Unspecified source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
             else if (textbox_InputPdf2.Text = "") then
-                MetroMessageBox.Show(mergeForm, "Please select input source 2.", "Error - Unspecified source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+                MetroMessageBox.Show(mergeMultipleForm, "Please select input source 2.", "Error - Unspecified source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
             else if (PdfReader.TestPdfFile(textbox_InputPdf1.Text) = 0) then
-                MetroMessageBox.Show(mergeForm, "Source 1 is invalid pdf file.", "Error - Invalid source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+                MetroMessageBox.Show(mergeMultipleForm, "Source 1 is invalid pdf file.", "Error - Invalid source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
             else if (PdfReader.TestPdfFile(textbox_InputPdf2.Text) = 0) then
-                MetroMessageBox.Show(mergeForm, "Source 2 is invalid pdf file.", "Error - Invalid source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+                MetroMessageBox.Show(mergeMultipleForm, "Source 2 is invalid pdf file.", "Error - Invalid source", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
             else
                 let saveFileDialogResult = saveFileDialog.ShowDialog()
                 match saveFileDialogResult with
@@ -216,12 +280,12 @@
                     pdfMerged.Save(newName)
                     printfn "Successfully saved merged pdf file."
                     label_Status.Text <- "Success!"
-                    MetroMessageBox.Show(mergeForm, "Successfully merged files.", "Success - Merge", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
+                    MetroMessageBox.Show(mergeMultipleForm, "Successfully merged files.", "Success - Merge", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
                     label_Status.Text <- "Ready"
                 | DialogResult.Cancel ->
                     printfn "Cancelled merge."
                 | _ ->
-                    printfn "%A" saveFileDialogResult
+                    printfn "%A" saveFileDialogResult*)
         )
 
-        mergeForm
+        mergeMultipleForm
