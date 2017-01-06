@@ -12,7 +12,7 @@ so if one need to merge or extract some pages or do other things, he/she have to
   
 - **Merge - 2 Files** : Supported.  
 - **Merge - Multiple Files** : Supported. List design will be improved soon.  
-- **Extract** : Currently not supported. Will support extract page as pdf/image soon.  
+- **Extract** : Pdf to Pdf extraction supported. Pdf to Image will be supported soon.  
 - **PdfToImage** : Currently not supported.  
 - **ImageToPdf** : Currently not supported.  
 - **Page Insertion** : Currently not supported.  
