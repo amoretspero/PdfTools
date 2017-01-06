@@ -2,6 +2,7 @@
 // See the 'F# Tutorial' project for more help.
 open MergePdf
 open MergePdfMultiple
+open ExtractPdf
 open MetroFramework
 open MetroFramework.Controls
 open MetroFramework.Forms
@@ -51,7 +52,17 @@ let main argv =
         mergeMultipleForm.ShowDialog() |> ignore
     )
 
-    mainForm.Controls.AddRange([| mergeTile; mergeMultipleTile |])
+    let extractTile = new MetroTile(Text = "Extract PDF", Size = new Size(120, 120), TextAlign = ContentAlignment.MiddleCenter, Location = new Point(400, 120))
+    extractTile.Click.Add(fun _ ->
+        mainForm.Hide()
+        let extractForm = extractFormGenerator()
+        extractForm.FormClosed.Add(fun _ ->
+            mainForm.Show()
+        )
+        extractForm.ShowDialog() |> ignore
+    )
+
+    mainForm.Controls.AddRange([| mergeTile; mergeMultipleTile; extractTile |])
 
     mainForm.ShowDialog() |> ignore
 
