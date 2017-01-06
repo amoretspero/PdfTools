@@ -26,6 +26,21 @@
         let mergeForm = new MetroForm()
         mergeForm.AutoSizeMode <- AutoSizeMode.GrowOnly
         mergeForm.AutoSize <- true
+        mergeForm.Closing.Add(fun e ->
+        if (mergeForm.Opacity > 0.0) then
+            e.Cancel <- true
+            let mergeFormClosingTimer = new Timer()
+            mergeFormClosingTimer.Interval <- 10
+            mergeFormClosingTimer.Tick.Add(fun _ ->
+                if (mergeForm.Opacity > 0.0) then mergeForm.Opacity <- mergeForm.Opacity - 0.1
+                else 
+                    mergeFormClosingTimer.Stop()
+                    mergeForm.Close()
+            )
+            mergeFormClosingTimer.Start()
+        else
+            mergeForm.Close()
+        )
 
         // File dialog definition region.
         let openFileDialogPdf1 = 

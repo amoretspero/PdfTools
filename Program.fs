@@ -61,7 +61,24 @@ let main argv =
         )
         extractForm.ShowDialog() |> ignore
     )
-
+    
+    mainForm.Closing.Add(fun e ->
+        if (mainForm.Opacity > 0.0) then
+            e.Cancel <- true
+            let mainFormClosingTimer = new Timer()
+            mainFormClosingTimer.Interval <- 10
+            mainFormClosingTimer.Tick.Add(fun _ ->
+                if (mainForm.Opacity > 0.0) then mainForm.Opacity <- mainForm.Opacity - 0.1
+                else 
+                    mainFormClosingTimer.Stop()
+                    mainForm.Close()
+            )
+            mainFormClosingTimer.Start()
+        else
+            mainForm.Close()
+    )
+    
+    
     mainForm.Controls.AddRange([| mergeTile; mergeMultipleTile; extractTile |])
 
     mainForm.ShowDialog() |> ignore

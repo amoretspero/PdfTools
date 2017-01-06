@@ -36,6 +36,21 @@
         let extractForm = new MetroForm()
         extractForm.AutoSizeMode <- AutoSizeMode.GrowOnly
         extractForm.AutoSize <- true
+        extractForm.Closing.Add(fun e ->
+        if (extractForm.Opacity > 0.0) then
+            e.Cancel <- true
+            let extractFormClosingTimer = new Timer()
+            extractFormClosingTimer.Interval <- 10
+            extractFormClosingTimer.Tick.Add(fun _ ->
+                if (extractForm.Opacity > 0.0) then extractForm.Opacity <- extractForm.Opacity - 0.1
+                else 
+                    extractFormClosingTimer.Stop()
+                    extractForm.Close()
+            )
+            extractFormClosingTimer.Start()
+        else
+            extractForm.Close()
+        )
 
 
         // File dialog definition region
