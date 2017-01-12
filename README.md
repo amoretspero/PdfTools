@@ -2,6 +2,11 @@
   
 **Open-source pdf tools built for windows(not only 10, for 8 and older versions).**  
   
+## Notice  
+  
+**Bug in PdfSharp 1.50 beta 3b.**  
+Due to this bug, development of this project is stopped temporarily.  
+  
 ## Description  
   
 Adobe Acrobat is very widely used PDF program. However, free version of it(Adobe Reader DC) only supports reading of PDF files,
